@@ -1,90 +1,76 @@
 {
-    "users": [
-        {
-            "id": 1,
-            "name": "nima Hadipour",
-            "username": "nima1224",
-            "crime": 0,
-            "role": "ADMIN"
-        },
-        {
-            "id": 2,
-            "name": "ali Hadipour",
-            "username": "ali1224",
-            "crime": 0,
-            "role": "MEMBER"
-        },
-        {
-            "id": 3,
-            "name": "reza Hadipour",
-            "username": "reza1224",
-            "crime": 0,
-            "role": "MEMBER"
-        },
-        {
-            "id": 4,
-            "name": "ahmad Hadipour",
-            "username": "ahmad1224",
-            "crime": 0,
-            "role": "MEMBER"
-        },
-        {
-            "id": 5,
-            "name": "mehri Hadipour",
-            "username": "mehri1224",
-            "crime": 0,
-            "role": "MEMBER"
-        },
-        {
-            "id": 6,
-            "name": "roshan Hadipour",
-            "username": "roshan1224",
-            "crime": 0,
-            "role": "MEMBER"
-        }
-    ],
-    "books": [
-        {
-            "id": 1,
-            "title": "Bishuri",
-            "author": "Akbar",
-            "price": 43000,
-            "free": 0
-        },
-        {
-            "id": 2,
-            "title": "Golestan",
-            "author": "Saadi",
-            "price": 45000,
-            "free": 1
-        },
-        {
-            "id": 3,
-            "title": "What Should i do",
-            "author": "John",
-            "price": 55000,
-            "free": 0
-        },
-        {
-            "id": 4,
-            "title": "Maktabe sharif",
-            "author": "Ayatolah ozma",
-            "price": 65000,
-            "free": 1
-        },
-        {
-            "id": 5,
-            "title": "Zan zendegi azadi",
-            "author": "Mahsa amini",
-            "price": 10000000,
-            "free": 0
-        },
-        {
-            "id": 6,
-            "title": "hekayat",
-            "author": "misaq",
-            "price": 70000,
-            "free": 1
-        }
-    ]
+  "users": [
+    {
+      "id": 1,
+      "name": "nima Hadipour",
+      "username": "nima1224",
+      "crime": 0,
+      "role": "ADMIN"
+    },
+    {
+      "id": 2,
+      "name": "ali Hadipour",
+      "username": "ali1224",
+      "crime": 0,
+      "role": "MEMBER"
+    },
+    {
+      "id": 3,
+      "name": "reza Hadipour",
+      "username": "reza1224",
+      "crime": 0,
+      "role": "MEMBER"
+    },
+    {
+      "id": 4,
+      "name": "ahmad Hadipour",
+      "username": "ahmad1224",
+      "crime": 0,
+      "role": "MEMBER"
+    },
+    {
+      "id": 5,
+      "name": "mehri Hadipour",
+      "username": "mehri1224",
+      "crime": 0,
+      "role": "MEMBER"
+    },
+    {
+      "id": 6,
+      "name": "roshan Hadipour",
+      "username": "roshan1224",
+      "crime": 0,
+      "role": "MEMBER"
+    }
+  ],
+  "books": [
+    {
+      "id": 1,
+      "title": "Bishuri",
+      "author": "Akbar",
+      "price": 43000,
+      "free": 0
+    },
+    {
+      "id": 4,
+      "title": "Maktabe sharif",
+      "author": "Ayatolah ozma",
+      "price": 65000,
+      "free": 1
+    },
+    {
+      "id": 5,
+      "title": "Zan zendegi azadi",
+      "author": "Mahsa amini",
+      "price": 10000000,
+      "free": 0
+    },
+    {
+      "id": 6,
+      "title": "hekayat",
+      "author": "misaq",
+      "price": 70000,
+      "free": 1
+    }
+  ]
 }

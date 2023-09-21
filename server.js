@@ -1,6 +1,8 @@
 const http = require('http')
-
 const fs = require('fs')
+const url = require('url')
+const db = require('./db.json')
+console.log(db);
 
 const server = http.createServer((req, res) => {
     if (req.method === 'GET' && req.url === '/api/users') {
@@ -26,6 +28,25 @@ const server = http.createServer((req, res) => {
             res.end()
 
         })
+    }
+    if (req.method === 'DELETE') {
+        const parsedUrl = url.parse(req.url, true)
+        const bookID = parsedUrl.query.id;
+
+        const newBooks = db.books.filter((book) => book.id != bookID)
+
+        fs.writeFile(
+            "db.json",
+            JSON.stringify({ ...db, books: newBooks }),
+            (err) => {
+                if (err) {
+                    throw err
+                }
+                res.writeHead(200, { "Content-Type": "application/json" })
+                res.write(JSON.stringify({ message: 'Book Removed Succesfuly' }))
+                res.end()
+            }
+        );
     }
 })
 
