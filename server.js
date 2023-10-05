@@ -2,6 +2,7 @@ const http = require('http')
 const fs = require('fs')
 const url = require('url')
 const db = require('./db.json')
+const crypto = require('crypto')
 console.log(db);
 
 const server = http.createServer((req, res) => {
@@ -29,7 +30,7 @@ const server = http.createServer((req, res) => {
 
         })
     }
-    if (req.method === 'DELETE') {
+    if (req.method === 'DELETE' && req.url.startsWith('/api/books')) {
         const parsedUrl = url.parse(req.url, true)
         const bookID = parsedUrl.query.id;
 
@@ -64,9 +65,75 @@ const server = http.createServer((req, res) => {
 
         req.on('end', () => {
             // console.log(JSON.parse(book));
-            const newBook = { id: 123, ...JSON.parse(book), free: 1 }
+            const newBook = { id: crypto.randomUUID(), ...JSON.parse(book), free: 1 }
+            db.books.push(newBook)
+            fs.writeFile('./db.json', JSON.stringify(db), (err) => {
+                if (err) {
+                    throw err
+                }
+                res.writeHead(201, { 'Content-Type': "application/json" })
+                res.write(JSON.stringify({ message: 'New Book Added' }))
+                res.end()
+            })
             console.log(newBook);
             res.end('New book added')
+        })
+    }
+    if (req.method === 'PUT' && req.url.startsWith('/api/books')) {
+        const parsedUrl = url.parse(req.url, true)
+        const bookId = parsedUrl.query.id
+        let newBookInfo = ''
+
+        req.on('data', (data) => {
+            newBookInfo = newBookInfo + data.toString()
+        })
+        req.on('end', () => {
+            const reqBody = JSON.parse(newBookInfo)
+
+            db.books.forEach((book) => {
+                if (book.id === Number(bookId)) {
+                    book.title = reqBody.title
+                    book.author = reqBody.author
+                    book.price = reqBody.price
+                }
+            })
+            fs.writeFile('./db.json', JSON.stringify(db), (err) => {
+                if (err) {
+                    throw err
+                }
+                res.writeHead(200, { 'Content-Type': 'application/json' })
+                res.write('Book Updated')
+                res.end()
+            })
+        })
+    }
+    if (req.method === "POST" && req.url === '/api/users') {
+        let newUser = ''
+
+        req.on('data', (data) => {
+            newUser = newUser + data.toString()
+        })
+        req.on('end', () => {
+            const { name, username, email } = JSON.parse(newUser)
+            const newUserInfo = {
+                id: crypto.randomUUID(),
+                name,
+                username,
+                email,
+                crime: 0
+            }
+            db.users.push(newUserInfo)
+            
+            fs.writeFile('./db.json', JSON.stringify(db), (err) => {
+                if (err) {
+                    throw err
+                }
+
+                res.writeHead(201, { 'Content-Type': 'application/json' })
+                res.write('UserRegistered')
+                res.end()
+            })
+            // console.log(newUserInfo);
         })
     }
 })
