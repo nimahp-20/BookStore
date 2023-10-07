@@ -3,7 +3,7 @@ const fs = require('fs')
 const url = require('url')
 const db = require('./db.json')
 const crypto = require('crypto')
-console.log(db);
+
 
 const server = http.createServer((req, res) => {
     if (req.method === 'GET' && req.url === '/api/users') {
@@ -189,6 +189,28 @@ const server = http.createServer((req, res) => {
                 res.write(JSON.stringify({ message: 'User Punished' }))
                 res.end()
             })
+        })
+    } else if (req.method === 'POST' && req.url.startsWith('/api/users/login')) {
+        let user = ''
+
+        req.on('data', (data) => {
+            user = user + data.toString()
+        })
+
+        req.on('end', () => {
+            const { username, email } = JSON.parse(user)
+
+            const isUser = db.users.find(user => user.username === username && user.email === email)
+            if (isUser) {
+                res.writeHead(200, { 'Content-Type': 'application/json' })
+                res.write(JSON.stringify({ username: isUser.username, email: isUser.email }))
+                res.end()
+            }
+            else {
+                res.writeHead(401, { 'Content-Type': 'application/json' })
+                res.write(JSON.stringify({ message: 'user not found' }))
+                res.end()
+            }
         })
     }
 
