@@ -17,8 +17,7 @@ const server = http.createServer((req, res) => {
             res.end()
 
         })
-    }
-    if (req.method === 'GET' && req.url === '/api/books') {
+    } else if (req.method === 'GET' && req.url === '/api/books') {
         fs.readFile('db.json', (err, db) => {
             if (err) {
                 throw err
@@ -29,8 +28,7 @@ const server = http.createServer((req, res) => {
             res.end()
 
         })
-    }
-    if (req.method === 'DELETE' && req.url.startsWith('/api/books')) {
+    } else if (req.method === 'DELETE' && req.url.startsWith('/api/books')) {
         const parsedUrl = url.parse(req.url, true)
         const bookID = parsedUrl.query.id;
 
@@ -55,8 +53,7 @@ const server = http.createServer((req, res) => {
             );
         }
 
-    }
-    if (req.method === "POST" && req.url === '/api/books') {
+    } else if (req.method === "POST" && req.url === '/api/books') {
         let book = ''
 
         req.on('data', (data) => {
@@ -78,8 +75,7 @@ const server = http.createServer((req, res) => {
             console.log(newBook);
             res.end('New book added')
         })
-    }
-    if (req.method === 'PUT' && req.url.startsWith('/api/books')) {
+    } else if (req.method === 'PUT' && req.url.startsWith('/api/books')) {
         const parsedUrl = url.parse(req.url, true)
         const bookId = parsedUrl.query.id
         let newBookInfo = ''
@@ -106,8 +102,7 @@ const server = http.createServer((req, res) => {
                 res.end()
             })
         })
-    }
-    if (req.method === "POST" && req.url === '/api/users') {
+    } else if (req.method === "POST" && req.url === '/api/users') {
         let newUser = ''
 
         req.on('data', (data) => {
@@ -133,7 +128,8 @@ const server = http.createServer((req, res) => {
                     name,
                     username,
                     email,
-                    crime: 0
+                    crime: 0,
+                    role: "USER"
                 }
                 db.users.push(newUserInfo)
 
@@ -150,8 +146,25 @@ const server = http.createServer((req, res) => {
 
             // console.log(newUserInfo);
         })
-    }
-    if (req.method === 'PUT' && req.url.startsWith('/api/users')) {
+    } else if (req.method === 'PUT' && req.url.startsWith('/api/users/upgrade')) {
+        const parsedUrl = url.parse(req.url, true)
+        const userID = parsedUrl.query.id
+
+        db.users.forEach((user) => {
+            if (user.id === +userID) {
+                user.role = "ADMIN"
+            }
+        })
+
+        fs.writeFile('./db.json', JSON.stringify(db), (err) => {
+            if (err) {
+                throw err
+            }
+            res.writeHead(200, { "Content-Type": "application/json" })
+            res.write(JSON.stringify({ message: 'User Updated' }))
+            res.end()
+        })
+    } else if (req.method === 'PUT' && req.url.startsWith('/api/users')) {
         const parsedUrl = url.parse(req.url, true)
         const userId = parsedUrl.query.id
         let reqBody = ''
@@ -178,6 +191,7 @@ const server = http.createServer((req, res) => {
             })
         })
     }
+
 })
 
 
