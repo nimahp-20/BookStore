@@ -115,25 +115,67 @@ const server = http.createServer((req, res) => {
         })
         req.on('end', () => {
             const { name, username, email } = JSON.parse(newUser)
-            const newUserInfo = {
-                id: crypto.randomUUID(),
-                name,
-                username,
-                email,
-                crime: 0
+
+            const isUserExists = db.users.find(
+                (user) => user.email === email || user.username === username
+            )
+            if (name === "" || username === "" || email === "") {
+                res.writeHead(422, { 'Content-Type': 'application/json' })
+                res.write(JSON.stringify({ message: 'Please Fill all data' }))
+                res.end()
+            } else if (isUserExists) {
+                res.writeHead(409, { 'Content-Type': 'application/json' })
+                res.write(JSON.stringify({ message: 'This user Already exists' }))
+                res.end()
+            } else {
+                const newUserInfo = {
+                    id: crypto.randomUUID(),
+                    name,
+                    username,
+                    email,
+                    crime: 0
+                }
+                db.users.push(newUserInfo)
+
+                fs.writeFile('./db.json', JSON.stringify(db), (err) => {
+                    if (err) {
+                        throw err
+                    }
+                })
+                res.writeHead(201, { 'Content-Type': 'application/json' })
+                res.write(JSON.stringify({ message: "UserRegisterd Succesfuly" }))
+                res.end()
             }
-            db.users.push(newUserInfo)
-            
+
+
+            // console.log(newUserInfo);
+        })
+    }
+    if (req.method === 'PUT' && req.url.startsWith('/api/users')) {
+        const parsedUrl = url.parse(req.url, true)
+        const userId = parsedUrl.query.id
+        let reqBody = ''
+
+        req.on('data', (data) => {
+            reqBody = reqBody + data.toString()
+        })
+
+        req.on('end', () => {
+            const { crime } = JSON.parse(reqBody)
+
+            db.users.forEach(user => {
+                if (user.id === +userId) {
+                    user.crime = crime
+                }
+            })
             fs.writeFile('./db.json', JSON.stringify(db), (err) => {
                 if (err) {
                     throw err
                 }
-
-                res.writeHead(201, { 'Content-Type': 'application/json' })
-                res.write('UserRegistered')
+                res.writeHead(200, { 'Content-Type': 'application/json' })
+                res.write(JSON.stringify({ message: 'User Punished' }))
                 res.end()
             })
-            // console.log(newUserInfo);
         })
     }
 })
