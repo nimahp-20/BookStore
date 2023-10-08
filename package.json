@@ -2,10 +2,10 @@
   "name": "bookstore",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js -w"
+    "start": "nodemon"
   },
   "repository": {
     "type": "git",
@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/nimahp-20/BookStore/issues"
   },
-  "homepage": "https://github.com/nimahp-20/BookStore#readme"
+  "homepage": "https://github.com/nimahp-20/BookStore#readme",
+  "dependencies": {
+    "mongodb": "^6.3.0",
+    "nodemon": "^3.0.1"
+  }
 }

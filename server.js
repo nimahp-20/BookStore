@@ -75,6 +75,23 @@ const server = http.createServer((req, res) => {
             console.log(newBook);
             res.end('New book added')
         })
+    } else if (req.method === 'PUT' && req.url.startsWith('/api/book/back')) {
+        const parsedUrl = url.parse(req.url, true)
+        const bookId = parsedUrl.query.id
+
+        db.books.forEach(book => {
+            if (book.id === +bookId) {
+                book.free = 1
+            }
+        })
+        fs.writeFile("./db.json", JSON.stringify(db), (err) => {
+            if (err) {
+                throw err
+            }
+            res.writeHead(200, { 'Content-Type': 'application/json' })
+            res.write(JSON.stringify({ message: 'Book is Back Now' }))
+            res.end()
+        })
     } else if (req.method === 'PUT' && req.url.startsWith('/api/books')) {
         const parsedUrl = url.parse(req.url, true)
         const bookId = parsedUrl.query.id
@@ -209,6 +226,45 @@ const server = http.createServer((req, res) => {
             else {
                 res.writeHead(401, { 'Content-Type': 'application/json' })
                 res.write(JSON.stringify({ message: 'user not found' }))
+                res.end()
+            }
+        })
+    } else if (req.method === 'POST' && req.url.startsWith('/api/users/rents')) {
+        let reqBody = ''
+
+        req.on('data', (data) => {
+            reqBody = reqBody + data.toString()
+        })
+
+        req.on('end', () => {
+            let { bookId, userId } = JSON.parse(reqBody)
+
+            const isFree = db.books.some(book => book.id === +bookId && book.free === 1)
+            if (isFree) {
+                db.books.forEach(book => {
+                    if (book.id === +bookId) {
+                        book.free = 0
+                    }
+                })
+                const newRent = {
+                    id: crypto.randomUUID(),
+                    userId,
+                    bookId
+                }
+                db.rents.push(newRent)
+
+                fs.writeFile('./db.json', JSON.stringify(db), (err) => {
+                    if (err) {
+                        throw err
+                    }
+
+                    res.writeHead(201, { 'Content-Type': 'application/json' })
+                    res.write(JSON.stringify({ message: 'Book is yourse Now' }))
+                    res.end()
+                })
+            } else {
+                res.writeHead(401, { 'Content-Type': 'application/json' })
+                res.write(JSON.stringify({ message: "This book is not free yet" }))
                 res.end()
             }
         })
