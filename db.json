@@ -17,7 +17,6 @@
             "role": "ADMIN"
         },
         {
-            
             "id": 3,
             "name": "Ehsan Mmdi",
             "username": "ehs",
@@ -48,7 +47,7 @@
             "title": "Golestan",
             "author": "Sadi",
             "price": 230000,
-            "free": 0
+            "free": 1
         },
         {
             "id": 2,
@@ -56,6 +55,18 @@
             "author": "Person 1",
             "price": 200000,
             "free": 1
+        }
+    ],
+    "rents": [
+        {
+            "id": 1,
+            "userId": 1,
+            "bookId": 1
+        },
+        {
+            "id": "e708c9a4-fc00-4b30-aecf-14934a3f7bfc",
+            "userId": "1",
+            "bookId": "2"
         }
     ]
 }
