@@ -3,7 +3,10 @@ const fs = require('fs')
 const url = require('url')
 const db = require('./db.json')
 const crypto = require('crypto')
+require('dotenv').config()
 
+
+// console.log(process.env)
 
 const server = http.createServer((req, res) => {
     if (req.method === 'GET' && req.url === '/api/users') {
@@ -273,6 +276,6 @@ const server = http.createServer((req, res) => {
 })
 
 
-server.listen(4503, () => {
-    console.log('Server is Running');
+server.listen(process.env.PORT, () => {
+    // console.log(`SErver Started ${process.env.PORT}`);
 })

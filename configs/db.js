@@ -1,33 +1,26 @@
 const { MongoClient } = require('mongodb');
+require('dotenv').config()
 
-const url = 'mongodb://127.0.0.1:27017';
-const dbName = 'library';
+const dbName = process.env.dbName;
 
+const client = new MongoClient(process.env.dbConnection);
 const main = async () => {
-    const client = new MongoClient(url);
 
     try {
         await client.connect();
         console.log('Connected to MongoDB');
 
         const db = client.db(dbName);
-        // const usersCollection = db.collection('users');
-        //
-        // const result = await usersCollection.insertOne({
-        //     name: 'Nima',
-        //     username: 'Nima12345',
-        //     email: 'nh@gmail.com',
-        //     crime: 0,
-        //     role: 'ADMIN',
-        // });
 
-        const rentsCollections = db.collection('rents')
-        const result = await  rentsCollections.insertOne({
-            "id": "e708c9a4-fc00-4b30-aecf-14934a3f7bfc",
-            "userId": "1",
-            "bookId": "2"
+        const users = db.collection('users')
+        const result = await  users.insertOne({
+            "name": "ali",
+            "username": "ali_mmdi",
+            "email": "ali@gmail.com",
+            "crime": 0,
+            "role": "USER"
         })
-        console.log(`Inserted document with _id: ${result.insertedId}`);
+        console.log(result);
     } catch (error) {
         console.error('Error:', error.message);
     } finally {

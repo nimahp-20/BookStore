@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/nimahp-20/BookStore#readme",
   "dependencies": {
+    "dotenv": "^16.3.1",
     "mongodb": "^6.3.0",
     "nodemon": "^3.0.1"
   }
